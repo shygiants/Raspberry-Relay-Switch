@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/raspberry-relay.iml" filepath="$PROJECT_DIR$/.idea/modules/raspberry-relay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/raspberry-relay_main.iml" filepath="$PROJECT_DIR$/.idea/modules/raspberry-relay_main.iml" group="raspberry-relay" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/raspberry-relay_test.iml" filepath="$PROJECT_DIR$/.idea/modules/raspberry-relay_test.iml" group="raspberry-relay" />
+    </modules>
+  </component>
+</project>
