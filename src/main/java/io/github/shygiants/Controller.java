@@ -1,12 +1,8 @@
 package io.github.shygiants;
 
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.RaspiPin;
-import com.pi4j.io.gpio.trigger.GpioSyncStateTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,39 +10,27 @@ import java.util.List;
  * @date 2016. 7. 2.
  * @see
  */
-public class Controller {
-
-    private final static class Assign implements Switch.OnClickListener {
-
-        private final Logger logger = LoggerFactory.getLogger(Assign.class);
-
-        private final Switch zwitch;
-        private final Power power;
-
-        public Assign(Pin switchPin, Pin powerPin, Pin statusPin) {
-            logger.info("Assign is created");
-            power = new Power(powerPin, statusPin);
-            zwitch = new Switch(switchPin, this);
-        }
-
-        @Override
-        public void onClick() {
-            logger.info("Switch {} is clicked", zwitch);
-            power.switchState();
-        }
-    }
+public class Controller implements LivoloSwitch.OnClickListener {
 
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
 
-    List<Assign> assigns;
+    private final List<Light> lights;
+    private final LivoloSwitch livoloSwitch;
 
-    public Controller(int numberOfSwitches) {
-        logger.info("Controller is created");
+    public Controller(List<Light> lights) {
+        logger.info("Created");
 
-        assigns = new ArrayList<>(numberOfSwitches);
-        for (int i = 0; i < numberOfSwitches; i++) {
-            assigns.add(i, new Assign(RaspiPin.GPIO_04, RaspiPin.GPIO_05, RaspiPin.GPIO_06));
+        if (lights.size() != 3) {
+            logger.error("The number of lights should be 3");
+            System.exit(1);
         }
-        logger.info("{} switches are created", numberOfSwitches);
+
+        this.lights = lights;
+        livoloSwitch = new LivoloSwitch(this);
+    }
+
+    @Override
+    public void onClick(int buttonNum) {
+        lights.get(buttonNum - 1).toggle();
     }
 }
