@@ -14,13 +14,15 @@ public class Power {
     private final Logger logger = LoggerFactory.getLogger(Power.class);
 
     private final GpioController gpioController = GpioFactory.getInstance();
-    private final GpioPinDigitalOutput pin;
+    private final GpioPinDigitalOutput powerPin;
+    private final GpioPinDigitalOutput statusPin;
 
     private boolean state;
 
-    public Power(Pin output) {
+    public Power(Pin powerPin, Pin statusPin) {
         logger.info("Power is created");
-        pin = gpioController.provisionDigitalOutputPin(output, "Power", PinState.HIGH);
+        this.statusPin = gpioController.provisionDigitalOutputPin(statusPin, "LED", PinState.LOW);
+        this.powerPin = gpioController.provisionDigitalOutputPin(powerPin, "Power", PinState.HIGH);
         state = false;
     }
 
@@ -32,8 +34,10 @@ public class Power {
     public boolean setState(boolean state) {
         if (this.state != state) {
             do {
-                pin.setState(!state);
-            } while (pin.getState() != (state? PinState.LOW : PinState.HIGH));
+                powerPin.setState(!state);
+                statusPin.setState(state);
+            } while (powerPin.getState() != (state? PinState.LOW : PinState.HIGH)
+                    || statusPin.getState() != (state? PinState.HIGH : PinState.LOW));
 
             this.state = state;
             return true;

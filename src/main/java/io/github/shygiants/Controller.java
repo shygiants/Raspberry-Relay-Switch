@@ -23,9 +23,9 @@ public class Controller {
         private final Switch zwitch;
         private final Power power;
 
-        public Assign(Pin switchPin, Pin powerPin) {
+        public Assign(Pin switchPin, Pin powerPin, Pin statusPin) {
             logger.info("Assign is created");
-            power = new Power(powerPin);
+            power = new Power(powerPin, statusPin);
             zwitch = new Switch(switchPin, this);
         }
 
@@ -45,7 +45,7 @@ public class Controller {
 
         assigns = new ArrayList<>(numberOfSwitches);
         for (int i = 0; i < numberOfSwitches; i++) {
-            assigns.add(i, new Assign(RaspiPin.GPIO_04, RaspiPin.GPIO_05));
+            assigns.add(i, new Assign(RaspiPin.GPIO_04, RaspiPin.GPIO_05, RaspiPin.GPIO_06));
         }
         logger.info("{} switches are created", numberOfSwitches);
     }
